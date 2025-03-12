@@ -7,13 +7,17 @@ public class PlayerManager : MonoBehaviour
 
     public PlayerData playerData;
 
-	public float health;
-
-    //public event Action OnDeath;
+	[HideInInspector] public PlayerMovement movement;
+	[HideInInspector] public PlayerGun gun;
+	[HideInInspector] public PlayerHealth health;
 
 	private void Awake()
 	{
 		if (Instance != null && Instance != this) { Destroy(gameObject); return; }
 		Instance = this;
+
+		movement = GetComponent<PlayerMovement>();
+		gun = GetComponent<PlayerGun>();
+		health = GetComponent<PlayerHealth>();
 	}
 }

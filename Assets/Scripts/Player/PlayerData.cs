@@ -3,8 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerData", menuName = "Scriptable Objects/PlayerData")]
 public class PlayerData : ScriptableObject
 {
-	public MovementData movementData;
-	public GunData shooterData;
+	public MovementData movement;
+	public GunData shooter;
+	public HealthData health;
 
 	[System.Serializable]
 	public class MovementData
@@ -34,5 +35,14 @@ public class PlayerData : ScriptableObject
 
 		public float firerate = 1f;
 		public float bulletSpeed = 2f;
+	}
+
+	[System.Serializable]
+	public class HealthData
+	{
+		[Header("Health")]
+		public int maxHealth = 5;
+
+		public float hitInvincibilityTime = 0.1f;
 	}
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Move object straight in specified direction
 /// </summary>
-public class MoveInDirection : MonoBehaviour
+public class MoveInDirection : MoveInDirectionBase
 {
     public UpdatableFloat speed = new(1f);
 
@@ -16,14 +16,13 @@ public class MoveInDirection : MonoBehaviour
 		speed.Update(Time.deltaTime);
 	}
 
-	public void SetDirection(Vector2 dir)
+	public override void SetDirection(Vector2 dir)
 	{
 		direction = dir.normalized;
 	}
 
-	public void SetDirectionToAngle(float angle)
+	public override void SetDirection(float angle)
 	{
-		float angleRadians = angle * Mathf.Deg2Rad;
-		direction = new Vector2(Mathf.Cos(angleRadians), Mathf.Sin(angleRadians));
+		direction = MyUtils.Vector2FromAngle(angle);
 	}
 }

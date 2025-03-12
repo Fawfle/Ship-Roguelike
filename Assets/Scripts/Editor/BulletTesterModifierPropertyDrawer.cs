@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using BulletTesting;
 
 [CustomPropertyDrawer(typeof(BulletTester.BulletTesterModifier))]
 public class BulletTesterModifierPropertyDrawer : PropertyDrawer

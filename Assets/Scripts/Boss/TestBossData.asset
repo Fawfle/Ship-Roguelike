@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33298f7378604e74cb9391b9db4c2082, type: 3}
+  m_Name: TestBossData
+  m_EditorClassIdentifier: 
+  basicBulletPrefab: {fileID: 388100205397720005, guid: 6ad0276323537b14ba9f417cde35783d, type: 3}
+  phase1Health: 10
+  attack1Duration: 4
+  attack1BulletSpeed: 4
+  attack1SpawnPeriod: 1
+  attack2Duration: 4
+  attack2BulletSpeed: 10
+  attack2SpawnPeriod: 1
+  phase2Health: 5
+  attack3Duration: 4
+  attack3BulletSpeed: 15
+  attack3SpawnPeriod: 0.5

@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static BulletTester;
+using BulletTesting;
 
 [CustomPropertyDrawer(typeof(BulletTester.BulletTesterEmitter))]
 public class BulletTesterEmitterPropertyDrawer : PropertyDrawer

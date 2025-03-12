@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		rb = GetComponent<Rigidbody2D>();
 
-		data = PlayerManager.Instance.playerData.movementData;
+		data = PlayerManager.Instance.playerData.movement;
 
 		SetMoveState(MoveState.Normal);
 	}

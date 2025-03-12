@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a94bb0411a412314fa393758c867ffd2, type: 3}
   m_Name: BasePlayerData
   m_EditorClassIdentifier: 
-  movementData:
-    speed: 8
-    focusDamping: 0.5
-    dashStartSpeed: 30
+  movement:
+    speed: 6
+    sneakDamping: 0.5
+    dashStartSpeed: 20
     dashEndSpeed: 10
     dashDuration: 0.3
-    dashCooldown: 0.5
-    dashAngleChangeDegrees: 90
-    stallDuration: 0.8
-  shooterData:
+    dashCooldown: 0.8
+    dashAngleChangeDegrees: 45
+    stallDuration: 1
+  shooter:
     bulletPrefab: {fileID: 6736781984233500365, guid: b2e3ca80cf020c641886c9790eaa44b4, type: 3}
-    firerate: 1.5
-    bulletSpeed: 15
+    firerate: 10
+    bulletSpeed: 10
+  health:
+    maxHealth: 5
+    hitInvincibilityTime: 0.1

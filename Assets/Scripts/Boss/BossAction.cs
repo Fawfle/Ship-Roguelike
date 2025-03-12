@@ -16,13 +16,14 @@ public class BossAction
 	public Func<bool> EndConditions;
 
 	/// <summary>
-	/// create a custom update loop with coroutines, passed duration
+	/// coroutines that are run on start (take in a float of the duration)
 	/// </summary>
-	public List<Func<float, IEnumerator>> updateCoroutines = new();
+	private List<Func<float, IEnumerator>> coroutines = new();
 	private List<Coroutine> runningCoroutines = new();
 
-	public BossAction(float duration)
+	public BossAction(BossManager manager, float duration)
 	{
+		this.manager = manager;
 		this.duration = duration;
 	}
 
@@ -32,7 +33,7 @@ public class BossAction
 
 		elapsed = 0f;
 
-		foreach (Func<float, IEnumerator> coroutine in updateCoroutines)
+		foreach (Func<float, IEnumerator> coroutine in coroutines)
 		{
 			runningCoroutines.Add(manager.StartCoroutine(coroutine(duration)));
 		}
@@ -50,16 +51,34 @@ public class BossAction
 		runningCoroutines.Clear();
 	}
 
-	public bool CheckExitCondition()
+	public void Update()
+	{
+		elapsed += Time.deltaTime;
+	}
+
+	public bool CheckExitConditions()
 	{
 		if (elapsed >= duration) return true;
 
-		foreach (Func<bool> condition in EndConditions?.GetInvocationList())
+		if (EndConditions != null)
 		{
-			if (condition()) return true;
+			foreach (Func<bool> condition in EndConditions?.GetInvocationList())
+			{
+				if (condition()) return true;
+			}
 		}
 
 		return false;
+	}
+
+	public void AddCoroutine(Func<IEnumerator> routine)
+	{
+		coroutines.Add((float _) => routine());
+	}
+
+	public void AddCoroutine(Func<float, IEnumerator> routine)
+	{
+		coroutines.Add(routine);
 	}
 
 	public static Func<BossAction> RandomBetween(params BossAction[] bossActions)

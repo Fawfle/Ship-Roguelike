@@ -10,7 +10,7 @@ public class PlayerGun : MonoBehaviour
 
 	private void Awake()
 	{
-		data = PlayerManager.Instance.playerData.shooterData;
+		data = PlayerManager.Instance.playerData.shooter;
 	}
 
 	private void Update()

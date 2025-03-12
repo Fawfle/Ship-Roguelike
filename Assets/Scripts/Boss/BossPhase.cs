@@ -17,15 +17,16 @@ public class BossPhase
     public event Action OnExit;
 
     /// <summary>
-    /// create a custom update loop with coroutines on start
+    /// coroutines that are run on enter
     /// </summary>
-    public List<Func<IEnumerator>> updateCoroutines = new();
+    public List<Func<IEnumerator>> coroutines = new();
     public List<Coroutine> runningCoroutines = new();
 
-    public List<Func<BossAction>> pattern = new();
+    public List<Func<BossAction>> actions = new();
     private BossAction currentAction;
+    private int currentActionIndex;
 
-    public BossPhase(float health, BossManager manager)
+    public BossPhase(BossManager manager, float health)
     {
         this.manager = manager;
         this.health = health;
@@ -36,10 +37,12 @@ public class BossPhase
     {
         OnEnter?.Invoke();
 
-		foreach (Func<IEnumerator> coroutine in updateCoroutines)
+		foreach (Func<IEnumerator> coroutine in coroutines)
 		{
 			manager.StartCoroutine(coroutine());
 		}
+
+        StartAction(0);
 	}
 
     public void Exit()
@@ -52,21 +55,30 @@ public class BossPhase
 		}
 
         runningCoroutines.Clear();
+
+        currentAction.End();
 	}
 
 	public void Update()
 	{
-		//if (currentAction.CheckExitCondition()) StartNextAction();
+        currentAction.Update();
+		if (currentAction.CheckExitConditions()) StartNextAction();
 	}
 
-	public void SetAction()
+	public void StartAction(int actionIndex)
     {
+        //Debug.Log("starting action... " + actionIndex);
         currentAction?.End();
+
+        currentAction = actions[actionIndex]();
+        currentActionIndex = actionIndex;
+
+        currentAction?.Start();
     }
 
-    public BossAction GetAction(int actionIndex)
+    public void StartNextAction()
     {
-        return pattern[actionIndex]();
+        StartAction((currentActionIndex + 1) % actions.Count);
     }
 
     /// <returns>If the phase has ended</returns>
@@ -80,11 +92,24 @@ public class BossPhase
 
     public void AddAction(BossAction action)
     {
-        pattern.Add(() => action);
+        actions.Add(() => action);
     }
 
 	public void AddAction(Func<BossAction> multiAction)
 	{
-		pattern.Add(multiAction);
+		actions.Add(multiAction);
 	}
+
+    /// <summary>
+    /// creates and adds a new single action to the phase
+    /// </summary>
+    /// <returns>the new action</returns>
+    public BossAction AddNewAction(float duration)
+    {
+        BossAction action = new(manager, duration);
+
+        actions.Add(() => action);
+        
+        return action;
+    }
 }

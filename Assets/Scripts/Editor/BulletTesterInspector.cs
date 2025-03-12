@@ -1,6 +1,7 @@
 
 using UnityEditor;
 using UnityEngine;
+using BulletTesting;
 
 [CustomEditor(typeof(BulletTester))]
 public class BulletTesterInspector : Editor

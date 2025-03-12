@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Homing objects
 /// </summary>
-public class MoveTowardsTarget : MonoBehaviour
+public class MoveTowardsTarget : MoveInDirectionBase
 {
 	public Transform target;
 	// direction bullet is currently traveling in
@@ -20,15 +20,15 @@ public class MoveTowardsTarget : MonoBehaviour
 		speed.Update(Time.deltaTime);
 		rotateSpeed.Update(Time.deltaTime);
 
-		transform.localPosition += speed.value * Time.deltaTime * new Vector3(Mathf.Cos(directionAngle * Mathf.Deg2Rad), Mathf.Sin(directionAngle * Mathf.Deg2Rad));
+		transform.localPosition += speed.value * Time.deltaTime * (Vector3)MyUtils.Vector2FromAngle(directionAngle);
 	}
 
-	public void SetDirection(Vector2 dir)
+	public override void SetDirection(Vector2 dir)
 	{
 		directionAngle = Vector2.SignedAngle(Vector2.right, dir);
 	}
 
-	public void SetDirection(float angle)
+	public override void SetDirection(float angle)
 	{
 		directionAngle = angle;
 	}
