@@ -1,77 +1,94 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InventoryItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+namespace Inventory
 {
-	private InventoryGrid grid;
-
-    public InventoryItemData itemData;
-
-	/// <summary>
-	/// Position of the relative (0,0) of the item
-	/// </summary>
-	public Vector2Int position;
-
-	// clicked cell of item
-	[HideInInspector] public Vector2Int dragCell = Vector2Int.zero;
-	[HideInInspector] public Vector2 dragOffset = Vector2.zero;
-
-	private Vector2 originalPosition;
-
-	private void Start()
+	public class InventoryItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	{
-		grid = GetComponentInParent<InventoryGrid>();
+		private InventoryGrid grid;
 
-		originalPosition = transform.position;
+		public InventoryItemData itemData;
 
-		GenerateCells();
-	}
+		/// <summary>
+		/// Position of the relative (0,0) of the item
+		/// </summary>
+		public Vector2Int position;
 
-	public void GenerateCells()
-    {
-		ClearGrid();
+		// clicked cell of item
+		[HideInInspector] public Vector2Int dragCell = Vector2Int.zero;
+		[HideInInspector] public Vector2 dragOffset = Vector2.zero;
 
-		foreach (Vector2Int cell in itemData.cells)
+		private Vector2 originalPosition;
+
+		public List<InventoryItemData.Cell> inRow = new();
+
+		public List<InventoryItemData.Cell> inColumn = new();
+
+		public List<InventoryItemData.Cell> adjacent = new();
+
+		private void Start()
 		{
-			var c = Instantiate(itemData.cellPrefab, transform);
+			grid = GetComponentInParent<InventoryGrid>();
 
-			c.transform.localPosition = grid.effectiveCellSize * (Vector2)cell;
-			c.GetComponent<RectTransform>().sizeDelta = grid.cellSize * Vector2.one;
+			originalPosition = transform.position;
+
+			GenerateCells();
 		}
-    }
 
-	public void ClearGrid()
-	{
-		for (int i = transform.childCount - 1; i >= 0; i--)
+		public void GenerateCells()
 		{
-			if (!Application.isPlaying) DestroyImmediate(transform.GetChild(i).gameObject);
-			else Destroy(transform.GetChild(i).gameObject);
+			ClearGrid();
+
+			foreach (InventoryItemData.Cell cell in itemData.cells)
+			{
+				var c = Instantiate(itemData.cellPrefab, transform);
+
+				c.transform.localPosition = grid.effectiveCellSize * (Vector2)cell.position;
+				c.GetComponent<RectTransform>().sizeDelta = grid.cellSize * Vector2.one;
+			}
 		}
-	}
 
-	public void SetGridPosition(InventoryGridCell cell)
-	{
-		this.position = cell.position;
-		transform.position = cell.transform.position;
+		public void ClearGrid()
+		{
+			for (int i = transform.childCount - 1; i >= 0; i--)
+			{
+				if (!Application.isPlaying) DestroyImmediate(transform.GetChild(i).gameObject);
+				else Destroy(transform.GetChild(i).gameObject);
+			}
+		}
 
-		originalPosition = transform.position;
-	}
+		public void SetGridPosition(InventoryGridCell cell)
+		{
+			this.position = cell.position;
+			transform.position = cell.transform.position;
 
-	public void ResetPosition()
-	{
-		transform.position = originalPosition;
-	}
+			originalPosition = transform.position;
+		}
 
-	public void OnPointerDown(PointerEventData eventData)
-	{
-		dragOffset = (Vector2)transform.position - InputManager.PointerWorldPosition;
-		dragCell = Vector2Int.RoundToInt(dragOffset / grid.effectiveCellSize);
+		public void ResetPosition()
+		{
+			transform.position = originalPosition;
+		}
 
-		grid.SelectInventoryItem(this);
-	}
+		public void OnPointerDown(PointerEventData eventData)
+		{
+			dragOffset = (Vector2)transform.position - InputManager.PointerWorldPosition;
+			dragCell = Vector2Int.RoundToInt(dragOffset / grid.effectiveCellSize);
 
-	public void OnPointerUp(PointerEventData eventData)
-	{
-		grid.DeselectInventoryItem(this);
+			grid.SelectInventoryItem(this);
+		}
+
+		public void OnPointerUp(PointerEventData eventData)
+		{
+			grid.DeselectInventoryItem(this);
+		}
+
+		public void ResetBonuses()
+		{
+			inRow.Clear();
+			inColumn.Clear();
+			adjacent.Clear();
+		}
 	}
 }

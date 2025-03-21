@@ -6,5 +6,11 @@ public class InventoryItemData : ScriptableObject
 {
 	public GameObject cellPrefab;
 	
-	public List<Vector2Int> cells = new();
+	public List<Cell> cells = new();
+
+	[System.Serializable]
+	public class Cell
+	{
+		public Vector2Int position;
+	}
 }
